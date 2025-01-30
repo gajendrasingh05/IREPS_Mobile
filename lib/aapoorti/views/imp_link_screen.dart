@@ -7,112 +7,170 @@ class ImplinkScreen extends StatefulWidget {
   State<ImplinkScreen> createState() => _ImplinkScreenState();
 }
 
-class _ImplinkScreenState extends State<ImplinkScreen> {
+class _ImplinkScreenState extends State<ImplinkScreen> with SingleTickerProviderStateMixin{
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ClipPath(
-            clipper: SlantedClipper(),
-            child: Container(
-              height: 50,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              color: Colors.cyan[700],
-              child: Text(
-                "Important Links",
-                style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
-              ),
+          Container(
+            height: 50,
+            color: Colors.cyan[700],
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Important Links',
+              style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
             ),
           ),
           Expanded(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 15.0,
-                    mainAxisSpacing: 15.0,
-                    children: List.generate(choices.length, (index){
-                      return Center(child: SelectCard(choice: choices[index]));
-                    })
-                ),
+            child: FadeTransition(
+              opacity: _animation,
+              child: ListView(
+                padding: EdgeInsets.all(20.0),
+                children: [
+                  _buildAnimatedTile(Icons.description, 'E-Documents'),
+                  SizedBox(height: 18),
+                  _buildAnimatedTile(Icons.block, 'Banned Firms'),
+                  SizedBox(height: 18),
+                  _buildAnimatedTile(Icons.storage, 'AAC'),
+                  SizedBox(height: 18),
+                  _buildAnimatedTile(Icons.check_box, 'Approved Vendors'),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
-    );;
+    );
+    // return Scaffold(
+    //   body: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     mainAxisAlignment: MainAxisAlignment.start,
+    //     children: [
+    //       ClipPath(
+    //         clipper: SlantedClipper(),
+    //         child: Container(
+    //           height: 50,
+    //           alignment: Alignment.centerLeft,
+    //           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+    //           color: Colors.cyan[700],
+    //           child: Text(
+    //             "Important Links",
+    //             style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
+    //           ),
+    //         ),
+    //       ),
+    //       Expanded(
+    //         child: Padding(
+    //             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+    //             child: GridView.count(
+    //                 crossAxisCount: 2,
+    //                 crossAxisSpacing: 15.0,
+    //                 mainAxisSpacing: 15.0,
+    //                 children: List.generate(choices.length, (index){
+    //                   return Center(child: SelectCard(choice: choices[index]));
+    //                 })
+    //             ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
-}
 
-class Choice {
-  const Choice({required this.title, required this.icon});
-  final String title;
-  final String icon;
-}
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'e-Documents', icon : 'assets/edoc_home.png'),
-  const Choice(title: 'Banned Firms', icon: 'assets/banned_firms.png'),
-  const Choice(title: 'AAC', icon: 'assets/aac_home.png'),
-  const Choice(title: 'Approved Vendors', icon: 'assets/approved_home.png'),
-];
-
-class SelectCard extends StatelessWidget {
-  const SelectCard({Key? key, required this.choice}) : super(key: key);
-  final Choice choice;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async{
-         if(choice.title == "e-Documents"){
-           bool check = await AapoortiUtilities.checkConnection();
-           if(check == true)
-             Navigator.pushNamed(context, "/edoc");
-           else
-             Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
-         }
-         else if(choice.title == "Banned Firms"){
-           bool check = await AapoortiUtilities.checkConnection();
-           if(check == true)
-             Navigator.pushNamed(context, "/banned_Firms");
-           else
-             Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
-         }
-         else if(choice.title == "AAC"){
-           bool check = await AapoortiUtilities.checkConnection();
-           if(check == true)
-             Navigator.pushNamed(context, "/aac");
-           else
-             Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
-         }
-         else{
-           Navigator.pushNamed(context, "/approved_vendors");
-         }
+  Widget _buildAnimatedTile(IconData icon, String label) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(-200 + (_animation.value * 200), 0),
+          child: InkWell(
+            onTap: () async{
+              if(label == "E-Documents"){
+                bool check = await AapoortiUtilities.checkConnection();
+                if(check == true)
+                  Navigator.pushNamed(context, "/edoc");
+                else
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
+              }
+              else if(label == "Banned Firms"){
+                bool check = await AapoortiUtilities.checkConnection();
+                if(check == true)
+                  Navigator.pushNamed(context, "/banned_Firms");
+                else
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
+              }
+              else if(label == "AAC"){
+                bool check = await AapoortiUtilities.checkConnection();
+                if(check == true)
+                  Navigator.pushNamed(context, "/aac");
+                else
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
+              }
+              else{
+                Navigator.pushNamed(context, "/approved_vendors");
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    icon,
+                    size: 40,
+                    color: Colors.teal,
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
-      child: Card(
-          color: Colors.white,
-          surfaceTintColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            side: BorderSide(width: 1.0, color: Colors.grey)
-          ),
-          child: Center(child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: Image.asset(choice.icon, height: 45, width: 45)),
-                Padding(
-                  padding: const EdgeInsets.only(bottom : 10.0),
-                  child: Text(choice.title, style: TextStyle(fontSize: 16, color: Colors.black)),
-                ),
-              ]
-          ),
-          )
-      ),
     );
   }
 }
@@ -142,5 +200,5 @@ class SlantedClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return false;
-  }
+    }
 }

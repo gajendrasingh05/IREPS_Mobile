@@ -364,19 +364,10 @@ class CustomSearchState extends State<CustomSearch> {
       //resizeToAvoidBottomPadding: true,
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.cyan[400],
+          backgroundColor: Colors.blue[500],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // IconButton(
-              //   alignment: Alignment.centerLeft,
-              //   icon: Icon(
-              //     Icons.arrow_back,
-              //   ),
-              //   onPressed: () {
-              //     Navigator.of(context, rootNavigator: true).pop();
-              //   },
-              // ),
               Padding(padding: EdgeInsets.only(left: 15.0)),
               Container(
                   alignment: Alignment.center,
@@ -413,498 +404,604 @@ class CustomSearchState extends State<CustomSearch> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget> [
         Padding(padding: EdgeInsets.all(0)),
-        Text("Select search criteria ", style: TextStyle(color: Colors.grey, fontSize: width! / 30), textAlign: TextAlign.start),
+        Text("Select search criteria ", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: width! / 25), textAlign: TextAlign.start),
         SizedBox(height: 10),
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-          InkWell(
-            onTap: () {
-              if(visibilitytno) {
-                setState(() {
-                  visibilitytno = false;
-                  visibilityidesc = false;
-                  visibilitysc = false;
-                  countersc = 1;
-                });
-              } else {
-                setState(() {
-                  visibilitytno = true;
-                  visibilityidesc = false;
-                  visibilitysc = true;
-                  countersc = 1;
-                });
-              }
 
-            },
-            child: Container(
-              height: 30.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                    color: visibilitytno ? Colors.green : Colors.grey[400]!,
-                    style: BorderStyle.solid,
-                    width: 2.0),
-                borderRadius: BorderRadius.circular(1.0),
-              ),
-              padding: const EdgeInsets.all(1.0),
-              child: Row(
-                children: <Widget>[
-                  Text(" Tender No", style: TextStyle(color: Colors.black)),
-                  Visibility(
-                    child: Image.asset(
-                      "assets/check_box.png",
-                      height: 20.0,
-                      width: width! / (width! / 60),
-                    ),
-                    maintainSize: true,
-                    maintainAnimation: true,
-                    maintainState: true,
-                    visible: visibilitytno,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(padding: EdgeInsets.fromLTRB(25, 0, 30, 0)),
-          InkWell(
-            onTap: () {
-              if(visibilityidesc) {
-                setState(() {
-                  visibilityidesc = false;
-                  visibilitytno = false;
-                  // visibilitysc = true;
-                  visibilitysc = false;
-                  countersc = 2;
-                });
-              } else {
-                setState(() {
-                  visibilityidesc = true;
-                  visibilitytno = false;
-                  visibilitysc = true;
-                  countersc = 2;
-                });
-              }
-            }, // onDoubleTap: () {  _changedsc(false, "idesc");        },
-            child: Container(
-              height: 30.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                    color: visibilityidesc ? Colors.green : Colors.grey[400]!,
-                    style: BorderStyle.solid,
-                    width: 2.0),
-                borderRadius: BorderRadius.circular(1.0),
-              ),
-              padding: const EdgeInsets.all(1.0),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "  Item Desc",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Visibility(
-                    child: Image.asset(
-                      "assets/check_box.png",
-                      height: 20.0,
-                      width: width! / (width! / 60),
-                    ),
-                    maintainSize: true,
-                    maintainAnimation: true,
-                    maintainState: true,
-                    visible: visibilityidesc,
-                  ),
-                ],
-              ),
-            ),
-          )
-        ]),
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            visibilitysc
-                ? Expanded(
-                    flex: 7,
-                    child: TextFormField(
-                      validator: (val) {
-                        if(val!.length < 3) {
-                          return 'must have min 3 char';
-                        }
-                        return null;
-                      },
-                      onSaved: (String? val) {
-                        content = val!;
-                        _validateInputs();
-                      },
-                      controller: myController,
-                      onEditingComplete: () {
-                        content = myController.text;
-                        FocusScope.of(context).requestFocus(_firstFocus);
-                      },
-                      maxLength: 25,
-                      textAlign: TextAlign.left,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            Icons.cancel,
-                            size: 12,
-                          ),
-                          onPressed: _onClearText,
-                        ),
-                        contentPadding: new EdgeInsets.fromLTRB(20, 10, 2, 10),
-                        prefixIcon: Icon(
-                          Icons.border_color,
-                          size: 11,
-                        ),
-                        hintText: visibilitytno
-                            ? ' Enter Tender No '
-                            : visibilityidesc
-                                ? ' Enter Item Description '
-                                : '',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
-                : SizedBox(height: 0.0)
+            // Tender No TextField
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: 10), // Add some space between the fields
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Tender No',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    // Handle tender number input here
+                  },
+                ),
+              ),
+            ),
+
+            // Item Description TextField
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 10), // Add some space between the fields
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Item Description',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    // Handle item description input here
+                  },
+                ),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 10),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text("Select Work Area", style: TextStyle(
-                color: visibilitywk ? Colors.grey : Colors.red,
-                fontSize: width! / 30),
+        Center(
+          child: Text(
+            "Select Work Area",
+            style: TextStyle(
+              color: visibilitywk ? Colors.black : Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: width! / 25,
+            ),
           ),
         ),
+        SizedBox(height: 10),
         Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: <Widget>[
-              Container(
-                width: width! * 0.3,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                  onPressed: () {
-                    _changedwk(true, "goods");
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Goods&\nServices",
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                        maxLines: 2,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            // Goods & Services Button
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3, // 30% of the screen width
+              height: 50, // Fixed height for buttons
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: visibilitygoods ? Colors.blue : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0), // Consistent border radius
+                  ),
+                  elevation: 5, // Shadow effect for the floating button
+                  padding: EdgeInsets.symmetric(vertical: 10), // Adjust vertical padding to fit text
+                ),
+                onPressed: () {
+                  setState(() {
+                    visibilitygoods = !visibilitygoods; // Toggle visibility
+                    visibilityworks = false;
+                    visibilitylt = false;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Center text horizontally
+                  children: <Widget>[
+                    Text(
+                      "Goods & Services",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12, // Increase font size slightly for readability
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(width: 4.0),
-                      Expanded(
-                        child: Visibility(
-                          child: Image.asset(
-                            "assets/check_box.png",
-                            height: 30.0,
-                            width: 30.0,
-                          ),
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: visibilitygoods,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Works Button
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3, // 30% of the screen width
+              height: 50, // Fixed height for buttons
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: visibilityworks ? Colors.blue : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  elevation: 5,
+                  padding: EdgeInsets.symmetric(vertical: 10), // Adjust vertical padding to fit text
+                ),
+                onPressed: () {
+                  setState(() {
+                    visibilityworks = !visibilityworks;
+                    visibilitygoods = false;
+                    visibilitylt = false;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Center text horizontally
+                  children: <Widget>[
+                    Text(
+                      "Works",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12, // Increase font size slightly for readability
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Earning/Leasing Button
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3, // 30% of the screen width
+              height: 50, // Fixed height for buttons
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: visibilitylt ? Colors.blue : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  elevation: 5,
+                  padding: EdgeInsets.symmetric(vertical: 10), // Adjust vertical padding to fit text
+                ),
+                onPressed: () {
+                  setState(() {
+                    visibilitylt = !visibilitylt;
+                    visibilitygoods = false;
+                    visibilityworks = false;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Center text horizontally
+                  children: <Widget>[
+                    Text(
+                      "Earning/Leasing",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12, // Increase font size slightly for readability
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        // Padding(padding: EdgeInsets.only(top: 5, left: 95.0)),
+        // FormField(
+        //   builder: (FormFieldState state) {
+        //     return InputDecorator(
+        //       decoration: InputDecoration(
+        //         icon: const Icon(Icons.train, color: Colors.black),
+        //         errorText: state.hasError ? state.errorText : null,
+        //       ),
+        //       child: DropdownButtonHideUnderline(
+        //         child: DropdownButton<String>(
+        //           isDense: true,
+        //           isExpanded: true,
+        //           icon: Icon(Icons.arrow_drop_down),
+        //           iconSize: 24,
+        //           elevation: 16,
+        //           style: TextStyle(color: Colors.black),
+        //           underline: Container(
+        //             height: 2,
+        //             color: Colors.black,
+        //           ),
+        //           value: myselection1,
+        //           disabledHint: Text('Select Organization'),
+        //           hint: Text('Select Organization'),
+        //           items: dataRly.map((item) {
+        //             return DropdownMenuItem(
+        //                 child: Text(item['NAME']),
+        //                 value: item['ID'].toString());
+        //           }).toList(),
+        //           onChanged: (String? newValue) {
+        //             debugPrint("Select Organization test $newValue");
+        //             try {
+        //               setState(() {
+        //                 debugPrint("Select Organization test0 $newValue");
+        //                 myselection = "-2;-2";
+        //                 myselection2 = "-2";
+        //                 debugPrint("Select Organization test00 $newValue");
+        //                 myselection3 = "-2";
+        //                 dataZone.clear();
+        //                 dataDept.clear();
+        //                 debugPrint("Select Organization test000 $newValue");
+        //                 //dataUnit.clear();
+        //                 debugPrint("Select Organization test1 $newValue");
+        //                 if(newValue != null) {
+        //                   debugPrint("Select Organization test2 $newValue");
+        //                   myselection = "-2;-2";
+        //                   myselection1 = (newValue == "-2" || newValue == "" ? null : newValue)!;
+        //                   state.didChange(newValue);
+        //                   debugPrint("Select Organization test3 $newValue");
+        //                 }
+        //               });
+        //             } catch (e) {
+        //               debugPrint("execption resp " + e.toString());
+        //             }
+        //             getZone();
+        //           },
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   onSaved: (String? val) {
+        //     myselection1 = val!;
+        //   },
+        //   validator: (val) {
+        //     if (val != null) {
+        //       return null;
+        //     } else {
+        //       return ' Please select Organization ';
+        //     }
+        //   },
+        // ),
+        // Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
+        // FormField(
+        //   builder: (FormFieldState state) {
+        //     return InputDecorator(
+        //       decoration: InputDecoration(
+        //         icon: const Icon(Icons.camera, color: Colors.black),
+        //         errorText: state.hasError ? state.errorText : null,
+        //       ),
+        //       child: DropdownButtonHideUnderline(
+        //         child: DropdownButton<String>(
+        //           isDense: true,
+        //           isExpanded: true,
+        //           icon: Icon(Icons.arrow_drop_down),
+        //           iconSize: 24,
+        //           elevation: 16,
+        //           style: TextStyle(color: Colors.black),
+        //           underline: Container(height: 2, color: Colors.black),
+        //           value: myselection == '-2;-2' || myselection == ""
+        //               ? null
+        //               : myselection,
+        //           disabledHint: Text('Select Railway'),
+        //           hint: Text('Select Railway'),
+        //           items: dataZone.map((item) {
+        //             return DropdownMenuItem(
+        //                 child: Text(item['NAME']),
+        //                 value: item['ACCID'].toString() + ";" + item['ID'].toString());
+        //           }).toList(),
+        //           onChanged: (String? newValue) {
+        //             try {
+        //               setState(() {
+        //                 myselection2 = "-2";
+        //                 myselection3 = "-2";
+        //                 dataDept.clear();
+        //                 dataUnit.clear();
+        //                 if (newValue != null) {
+        //
+        //                   myselection = (newValue == "-2;-2" || newValue == ""
+        //                       ? null
+        //                       : newValue)!;
+        //                   state.didChange(newValue);
+        //                 }
+        //               });
+        //             } catch (e) {
+        //             }
+        //             fetchDept();
+        //           },
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   onSaved: (String? val) {
+        //     myselection = val!;
+        //   },
+        //   validator: (val) {
+        //     if (val != null) {
+        //       return null;
+        //     } else {
+        //       return 'Please select  Railway ';
+        //     }
+        //   },
+        // ),
+        // Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
+        // FormField(
+        //   builder: (FormFieldState state) {
+        //     return InputDecorator(
+        //       decoration: InputDecoration(
+        //         icon: const Icon(Icons.account_balance, color: Colors.black),
+        //         errorText: state.hasError ? state.errorText : null,
+        //       ),
+        //       isEmpty: myselection2 == '-2',
+        //       child: DropdownButtonHideUnderline(
+        //         child: DropdownButton<String>(
+        //           isDense: true,
+        //           isExpanded: true,
+        //           icon: Icon(Icons.arrow_drop_down),
+        //           iconSize: 24,
+        //           elevation: 16,
+        //           style: TextStyle(color: Colors.black),
+        //           underline: Container(
+        //             height: 2,
+        //             color: Colors.black,
+        //           ),
+        //           value: myselection2 == "-2" ? null : myselection2,
+        //           disabledHint: Text('Select Department'),
+        //           hint: Text('Select Department'),
+        //           items: dataDept.map((item) {
+        //             return DropdownMenuItem(
+        //                 child: Text(item['NAME']),
+        //                 value: item['ID'].toString());
+        //           }).toList(),
+        //           onChanged: (String? newValue) {
+        //             state.didChange(newValue);
+        //             setState(() {
+        //               myselection3 = "-2";
+        //
+        //               dataUnit.clear();
+        //               debugPrint("my selection2 second newVal1" + newValue!);
+        //               myselection2 = (newValue == "-2" ? null : newValue)!;
+        //               debugPrint("my selection2 second" + myselection2);
+        //             });
+        //             fetchUnit();
+        //           },
+        //         ),
+        //       ),
+        //     );
+        //    },
+        //   validator: (val) {
+        //     if (val != null) {
+        //       return null;
+        //     } else {
+        //       return 'Please select Department ';
+        //     }
+        //   },
+        // ),
+        // Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
+        // FormField(
+        //   builder: (FormFieldState state) {
+        //     return InputDecorator(
+        //       decoration: InputDecoration(
+        //         icon: const Icon(Icons.device_hub, color: Colors.black),
+        //         errorText: state.hasError ? state.errorText : null,
+        //       ),
+        //       isEmpty: myselection3 == '-2',
+        //       child: DropdownButtonHideUnderline(
+        //         child: DropdownButton<String>(
+        //           isDense: true,
+        //           isExpanded: true,
+        //           icon: Icon(Icons.arrow_drop_down),
+        //           iconSize: 24,
+        //           elevation: 16,
+        //           style: TextStyle(color: Colors.black),
+        //           underline: Container(
+        //             height: 2,
+        //             color: Colors.black,
+        //           ),
+        //           value: myselection3 == "-2" ? null : myselection3,
+        //           hint: Text('Select Unit'),
+        //           disabledHint: Text('Select Unit'),
+        //           items: dataUnit.map((item) {
+        //             return DropdownMenuItem(
+        //                 child: Text(item['NAME']),
+        //                 value: item['ID'].toString());
+        //           }).toList(),
+        //           onChanged: (String? newValue) {
+        //             state.didChange(newValue);
+        //             setState(() {
+        //
+        //               myselection3 = (newValue == "-2" ? null : newValue)!;
+        //             });
+        //             _validateInputs();
+        //           },
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   onSaved: (String? val) {
+        //     myselection3 = val!;
+        //   },
+        //   validator: (val) {
+        //     return val != null ? null : 'Please select unit';
+        //   },
+        // ),
+        // Padding(padding: EdgeInsets.only(top: 15, left: 0)),
+
+        SizedBox(height: 15),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
+            borderRadius: BorderRadius.circular(8), // Rounded corners for the box
+            color: Colors.white,
+          ),
+          padding: EdgeInsets.all(15), // Padding around the box
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // First Dropdown (Organization)
+              Padding(
+                padding: EdgeInsets.only(bottom: 10), // Add spacing between fields
+                child: FormField(
+                  builder: (FormFieldState state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.train, color: Colors.black),
+                        errorText: state.hasError ? state.errorText : null,
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black),
+                          value: myselection1,
+                          disabledHint: Text('Select Organization'),
+                          hint: Text('Select Organization'),
+                          items: dataRly.map((item) {
+                            return DropdownMenuItem(
+                                child: Text(item['NAME']),
+                                value: item['ID'].toString());
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              myselection1 = (newValue == "-2" || newValue == "" ? null : newValue)!;
+                              state.didChange(newValue);
+                            });
+                            getZone();
+                          },
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
+                  onSaved: (String? val) {
+                    myselection1 = val!;
+                  },
+                  validator: (val) {
+                    return val != null ? null : 'Please select Organization';
+                  },
                 ),
               ),
-              Container(
-                width: width! * 0.3,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                  onPressed: () {
-                    _changedwk(true, "works");
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Works",
-                        style: TextStyle(color: Colors.black),
+
+              // Second Dropdown (Railway)
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: FormField(
+                  builder: (FormFieldState state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.camera, color: Colors.black),
+                        errorText: state.hasError ? state.errorText : null,
                       ),
-                      SizedBox(width: 4.0),
-                      Expanded(
-                        child: Visibility(
-                          child: Image.asset(
-                            "assets/check_box.png",
-                            height: 30.0,
-                            width: 30.0,
-                          ),
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: visibilityworks,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black),
+                          value: myselection == '-2;-2' || myselection == "" ? null : myselection,
+                          disabledHint: Text('Select Railway'),
+                          hint: Text('Select Railway'),
+                          items: dataZone.map((item) {
+                            return DropdownMenuItem(
+                                child: Text(item['NAME']),
+                                value: item['ACCID'].toString() + ";" + item['ID'].toString());
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              myselection = (newValue == "-2;-2" || newValue == "" ? null : newValue)!;
+                              state.didChange(newValue);
+                            });
+                            fetchDept();
+                          },
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
+                  onSaved: (String? val) {
+                    myselection = val!;
+                  },
+                  validator: (val) {
+                    return val != null ? null : 'Please select Railway';
+                  },
                 ),
               ),
-              Container(
-                width: width! * 0.3,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                  onPressed: () {
-                    _changedwk(true, "earning");
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Earning/\nLeasing",
-                        style: TextStyle(color: Colors.black),
+
+              // Third Dropdown (Department)
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: FormField(
+                  builder: (FormFieldState state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.account_balance, color: Colors.black),
+                        errorText: state.hasError ? state.errorText : null,
                       ),
-                      SizedBox(width: 4.0),
-                      Expanded(
-                        child: Visibility(
-                          child: Image.asset(
-                            "assets/check_box.png",
-                            height: 30.0,
-                            width: 30.0,
-                          ),
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: visibilitylt,
+                      isEmpty: myselection2 == '-2',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black),
+                          value: myselection2 == "-2" ? null : myselection2,
+                          disabledHint: Text('Select Department'),
+                          hint: Text('Select Department'),
+                          items: dataDept.map((item) {
+                            return DropdownMenuItem(
+                                child: Text(item['NAME']),
+                                value: item['ID'].toString());
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              myselection2 = (newValue == "-2" ? null : newValue)!;
+                              state.didChange(newValue);
+                            });
+                            fetchUnit();
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-        ]),
-        Padding(padding: EdgeInsets.only(top: 5, left: 95.0)),
-        FormField(
-          builder: (FormFieldState state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.train, color: Colors.black),
-                errorText: state.hasError ? state.errorText : null,
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isDense: true,
-                  isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.black),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.black,
-                  ),
-                  value: myselection1,
-                  disabledHint: Text('Select Organization'),
-                  hint: Text('Select Organization'),
-                  items: dataRly.map((item) {
-                    return DropdownMenuItem(
-                        child: Text(item['NAME']),
-                        value: item['ID'].toString());
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    debugPrint("Select Organization test $newValue");
-                    try {
-                      setState(() {
-                        debugPrint("Select Organization test0 $newValue");
-                        myselection = "-2;-2";
-                        myselection2 = "-2";
-                        debugPrint("Select Organization test00 $newValue");
-                        myselection3 = "-2";
-                        dataZone.clear();
-                        dataDept.clear();
-                        debugPrint("Select Organization test000 $newValue");
-                        //dataUnit.clear();
-                        debugPrint("Select Organization test1 $newValue");
-                        if(newValue != null) {
-                          debugPrint("Select Organization test2 $newValue");
-                          myselection = "-2;-2";
-                          myselection1 = (newValue == "-2" || newValue == "" ? null : newValue)!;
-                          state.didChange(newValue);
-                          debugPrint("Select Organization test3 $newValue");
-                        }
-                      });
-                    } catch (e) {
-                      debugPrint("execption resp " + e.toString());
-                    }
-                    getZone();
+                    );
+                  },
+                  validator: (val) {
+                    return val != null ? null : 'Please select Department';
                   },
                 ),
               ),
-            );
-          },
-          onSaved: (String? val) {
-            myselection1 = val!;
-          },
-          validator: (val) {
-            if (val != null) {
-              return null;
-            } else {
-              return ' Please select Organization ';
-            }
-          },
-        ),
-        Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
-        FormField(
-          builder: (FormFieldState state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.camera, color: Colors.black),
-                errorText: state.hasError ? state.errorText : null,
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isDense: true,
-                  isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.black),
-                  underline: Container(height: 2, color: Colors.black),
-                  value: myselection == '-2;-2' || myselection == ""
-                      ? null
-                      : myselection,
-                  disabledHint: Text('Select Railway'),
-                  hint: Text('Select Railway'),
-                  items: dataZone.map((item) {
-                    return DropdownMenuItem(
-                        child: Text(item['NAME']),
-                        value: item['ACCID'].toString() + ";" + item['ID'].toString());
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    try {
-                      setState(() {
-                        myselection2 = "-2";
-                        myselection3 = "-2";
-                        dataDept.clear();
-                        dataUnit.clear();
-                        if (newValue != null) {
 
-                          myselection = (newValue == "-2;-2" || newValue == ""
-                              ? null
-                              : newValue)!;
-                          state.didChange(newValue);
-                        }
-                      });
-                    } catch (e) {
-                    }
-                    fetchDept();
+              // Fourth Dropdown (Unit)
+              Padding(
+                padding: EdgeInsets.only(bottom: 15),
+                child: FormField(
+                  builder: (FormFieldState state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.device_hub, color: Colors.black),
+                        errorText: state.hasError ? state.errorText : null,
+                      ),
+                      isEmpty: myselection3 == '-2',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          isDense: true,
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black),
+                          value: myselection3 == "-2" ? null : myselection3,
+                          hint: Text('Select Unit'),
+                          disabledHint: Text('Select Unit'),
+                          items: dataUnit.map((item) {
+                            return DropdownMenuItem(
+                                child: Text(item['NAME']),
+                                value: item['ID'].toString());
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              myselection3 = (newValue == "-2" ? null : newValue)!;
+                            });
+                            _validateInputs();
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  onSaved: (String? val) {
+                    myselection3 = val!;
+                  },
+                  validator: (val) {
+                    return val != null ? null : 'Please select unit';
                   },
                 ),
               ),
-            );
-          },
-          onSaved: (String? val) {
-            myselection = val!;
-          },
-          validator: (val) {
-            if (val != null) {
-              return null;
-            } else {
-              return 'Please select  Railway ';
-            }
-          },
+            ],
+          ),
         ),
-        Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
-        FormField(
-          builder: (FormFieldState state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.account_balance, color: Colors.black),
-                errorText: state.hasError ? state.errorText : null,
-              ),
-              isEmpty: myselection2 == '-2',
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isDense: true,
-                  isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.black),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.black,
-                  ),
-                  value: myselection2 == "-2" ? null : myselection2,
-                  disabledHint: Text('Select Department'),
-                  hint: Text('Select Department'),
-                  items: dataDept.map((item) {
-                    return DropdownMenuItem(
-                        child: Text(item['NAME']),
-                        value: item['ID'].toString());
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    state.didChange(newValue);
-                    setState(() {
-                      myselection3 = "-2";
 
-                      dataUnit.clear();
-                      debugPrint("my selection2 second newVal1" + newValue!);
-                      myselection2 = (newValue == "-2" ? null : newValue)!;
-                      debugPrint("my selection2 second" + myselection2);
-                    });
-                    fetchUnit();
-                  },
-                ),
-              ),
-            );
-          },
-          validator: (val) {
-            if (val != null) {
-              return null;
-            } else {
-              return 'Please select Department ';
-            }
-          },
-        ),
-        Padding(padding: EdgeInsets.only(top: 5, left: 5.0)),
-        FormField(
-          builder: (FormFieldState state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.device_hub, color: Colors.black),
-                errorText: state.hasError ? state.errorText : null,
-              ),
-              isEmpty: myselection3 == '-2',
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isDense: true,
-                  isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.black),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.black,
-                  ),
-                  value: myselection3 == "-2" ? null : myselection3,
-                  hint: Text('Select Unit'),
-                  disabledHint: Text('Select Unit'),
-                  items: dataUnit.map((item) {
-                    return DropdownMenuItem(
-                        child: Text(item['NAME']),
-                        value: item['ID'].toString());
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    state.didChange(newValue);
-                    setState(() {
-
-                      myselection3 = (newValue == "-2" ? null : newValue)!;
-                    });
-                    _validateInputs();
-                  },
-                ),
-              ),
-            );
-          },
-          onSaved: (String? val) {
-            myselection3 = val!;
-          },
-          validator: (val) {
-            return val != null ? null : 'Please select unit';
-          },
-        ),
-        Padding(padding: EdgeInsets.only(top: 15, left: 0)),
         Align(
           alignment: Alignment.topLeft,
           child: Text("Select Tender Date Criteria (Maximum difference 30 days)",

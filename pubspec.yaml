@@ -54,7 +54,6 @@ dependencies:
   device_info_plus: ^10.1.0
   webview_flutter: ^4.0.0
 
-
   #Because every version of flutter_test from sdk depends on path 1.7.0 and flutter_app depends on path 1.6.4, flutter_test from sdk is forbidden.
   path: ^1.8.0
   open_filex: ^4.5.0

@@ -2,11 +2,7 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 import 'package:flutter/material.dart';
-
-
-
 class MyAppnodata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +12,7 @@ class MyAppnodata extends StatelessWidget {
         // //resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           iconTheme: new IconThemeData(color: Colors.white),
-
+          backgroundColor: Colors.blue[800],
           title: Text('AAC-Item Annual...'),
         ),
         body: Center(

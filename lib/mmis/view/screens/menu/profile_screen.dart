@@ -24,305 +24,306 @@ class _ProfileScreenState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
-      resizeToAvoidBottomInset: true,
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        backgroundColor: Colors.white,
-        elevation: 0,
-        child: Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: CustomBottomNav(currentIndex: 2),
-      body: Container(
-        height: Get.height,
-        width: Get.width,
-        child: Obx((){
-          if(profileController.profileState.value == ProfileState.loading){
-            Center(child: CircularProgressIndicator(strokeWidth: 3));
-          }
-          else{
-            return Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        height: mediaQuery.size.height * 0.50,
-                        width: mediaQuery.size.width,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fitHeight,
-                            image: AssetImage('assets/images/welcome.jpg'),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: mediaQuery.size.height * 0.15,
-                        child: FittedBox(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.transparent,
-                                  foregroundColor: Colors.black,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      profileController.initianame!.value,
-                                      style: TextStyle(
-                                        fontSize: 50,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white60,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              Container(
-                                height: 30,
-                                // width: mediaQuery.size.width * 0.6,
-                                width: 250,
-                                child: FittedBox(
-                                  child: (profileController.username!.value.isEmpty) ? SizedBox(height: 1, width: 1) : Text(profileController.username!.value, style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white60,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    height: mediaQuery.size.height * 0.55,
-                    width: mediaQuery.size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    height: mediaQuery.size.height * 0.55,
-                    width: mediaQuery.size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    height: mediaQuery.size.height * 0.55,
-                    width: mediaQuery.size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    child: Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                      child: ListView(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(Icons.phone, size: 25),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: Text(
-                                  profileController.mobile!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Icon(Icons.email, size: 25),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: (profileController.email!.value.isEmpty) ? SizedBox(width: 1, height: 1) : Text(profileController.email!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/name_profile.png',
-                                width: 24,
-                                height: 32,
-                              ),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: Text(
-                                  profileController.usertype!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/work_area.png',
-                                width: 24,
-                                height: 32,
-                              ),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: Text(
-                                  profileController.workarea!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              // Expanded(
-                              //   child: Divider(),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Organization Details',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.blue[900],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/firm_icon.png',
-                                width: 24,
-                                height: 32,
-                              ),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: Text(
-                                  profileController.firmname!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Last Login Time',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.blue[900],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/login_time.png',
-                                width: 24,
-                                height: 32,
-                              ),
-                              SizedBox(width: 25),
-                              Expanded(
-                                child: Text(
-                                  profileController.lastlogintime!.value,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-          return SizedBox();
-        }),
-      ),
-    );
+    return Container();
+    // return Scaffold(
+    //   floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+    //   resizeToAvoidBottomInset: true,
+    //   floatingActionButton: FloatingActionButton(
+    //     mini: true,
+    //     onPressed: () {
+    //       Navigator.of(context).pop();
+    //     },
+    //     backgroundColor: Colors.white,
+    //     elevation: 0,
+    //     child: Align(
+    //       alignment: Alignment.center,
+    //       child: Padding(
+    //         padding: const EdgeInsets.only(right: 4.0),
+    //         child: Icon(
+    //           Icons.arrow_back_ios_rounded,
+    //           color: Colors.black,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    //   bottomNavigationBar: CustomBottomNav(currentIndex: 2),
+    //   body: Container(
+    //     height: Get.height,
+    //     width: Get.width,
+    //     child: Obx((){
+    //       if(profileController.profileState.value == ProfileState.loading){
+    //         Center(child: CircularProgressIndicator(strokeWidth: 3));
+    //       }
+    //       else{
+    //         return Stack(
+    //           children: [
+    //             Positioned(
+    //               top: 0,
+    //               left: 0,
+    //               child: Stack(
+    //                 alignment: Alignment.center,
+    //                 children: [
+    //                   Container(
+    //                     height: mediaQuery.size.height * 0.50,
+    //                     width: mediaQuery.size.width,
+    //                     decoration: BoxDecoration(
+    //                       image: DecorationImage(
+    //                         fit: BoxFit.fitHeight,
+    //                         image: AssetImage('assets/images/welcome.jpg'),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   Positioned(
+    //                     bottom: mediaQuery.size.height * 0.15,
+    //                     child: FittedBox(
+    //                       child: Column(
+    //                         children: [
+    //                           Container(
+    //                             child: CircleAvatar(
+    //                               radius: 50,
+    //                               backgroundColor: Colors.transparent,
+    //                               foregroundColor: Colors.black,
+    //                               child: Padding(
+    //                                 padding: const EdgeInsets.all(8.0),
+    //                                 child: Text(
+    //                                   profileController.initianame!.value,
+    //                                   style: TextStyle(
+    //                                     fontSize: 50,
+    //                                     fontWeight: FontWeight.w300,
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                             decoration: BoxDecoration(
+    //                               color: Colors.white60,
+    //                               borderRadius: BorderRadius.circular(100),
+    //                             ),
+    //                           ),
+    //                           SizedBox(height: 20),
+    //                           Container(
+    //                             height: 30,
+    //                             // width: mediaQuery.size.width * 0.6,
+    //                             width: 250,
+    //                             child: FittedBox(
+    //                               child: (profileController.username!.value.isEmpty) ? SizedBox(height: 1, width: 1) : Text(profileController.username!.value, style: TextStyle(fontWeight: FontWeight.bold),
+    //                               ),
+    //                             ),
+    //                             decoration: BoxDecoration(
+    //                               color: Colors.white60,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //             Positioned(
+    //               bottom: 0,
+    //               child: Container(
+    //                 height: mediaQuery.size.height * 0.55,
+    //                 width: mediaQuery.size.width,
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.white,
+    //                   borderRadius: BorderRadius.only(
+    //                     topLeft: Radius.circular(40),
+    //                     topRight: Radius.circular(40),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //             Positioned(
+    //               bottom: 0,
+    //               child: Container(
+    //                 height: mediaQuery.size.height * 0.55,
+    //                 width: mediaQuery.size.width,
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.blue,
+    //                   borderRadius: BorderRadius.only(
+    //                     topLeft: Radius.circular(40),
+    //                     topRight: Radius.circular(40),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //             Positioned(
+    //               bottom: 0,
+    //               right: 0,
+    //               child: Container(
+    //                 height: mediaQuery.size.height * 0.55,
+    //                 width: mediaQuery.size.width,
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.white,
+    //                   borderRadius: BorderRadius.only(
+    //                     topLeft: Radius.circular(40),
+    //                     topRight: Radius.circular(40),
+    //                   ),
+    //                 ),
+    //                 child: Padding(
+    //                   padding:
+    //                   const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+    //                   child: ListView(
+    //                     children: [
+    //                       Row(
+    //                         children: [
+    //                           Icon(Icons.phone, size: 25),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: Text(
+    //                               profileController.mobile!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 20),
+    //                       Row(
+    //                         children: [
+    //                           Icon(Icons.email, size: 25),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: (profileController.email!.value.isEmpty) ? SizedBox(width: 1, height: 1) : Text(profileController.email!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 20),
+    //                       Row(
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/images/name_profile.png',
+    //                             width: 24,
+    //                             height: 32,
+    //                           ),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: Text(
+    //                               profileController.usertype!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 20),
+    //                       Row(
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/images/work_area.png',
+    //                             width: 24,
+    //                             height: 32,
+    //                           ),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: Text(
+    //                               profileController.workarea!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 10),
+    //                       Row(
+    //                         children: [
+    //                           // Expanded(
+    //                           //   child: Divider(),
+    //                           // ),
+    //                           Padding(
+    //                             padding: const EdgeInsets.all(8.0),
+    //                             child: Text(
+    //                               'Organization Details',
+    //                               style: TextStyle(
+    //                                 fontWeight: FontWeight.bold,
+    //                                 fontSize: 16,
+    //                                 color: Colors.blue[900],
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Expanded(
+    //                             child: Divider(),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 10),
+    //
+    //                       Row(
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/images/firm_icon.png',
+    //                             width: 24,
+    //                             height: 32,
+    //                           ),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: Text(
+    //                               profileController.firmname!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 10),
+    //                       Row(
+    //                         children: [
+    //                           Padding(
+    //                             padding: const EdgeInsets.all(8.0),
+    //                             child: Text(
+    //                               'Last Login Time',
+    //                               style: TextStyle(
+    //                                 fontWeight: FontWeight.bold,
+    //                                 fontSize: 16,
+    //                                 color: Colors.blue[900],
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Expanded(
+    //                             child: Divider(),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 10),
+    //                       Row(
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/images/login_time.png',
+    //                             width: 24,
+    //                             height: 32,
+    //                           ),
+    //                           SizedBox(width: 25),
+    //                           Expanded(
+    //                             child: Text(
+    //                               profileController.lastlogintime!.value,
+    //                               style: TextStyle(
+    //                                 fontSize: 20,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 20),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         );
+    //       }
+    //       return SizedBox();
+    //     }),
+    //   ),
+    // );
 }}
 
 

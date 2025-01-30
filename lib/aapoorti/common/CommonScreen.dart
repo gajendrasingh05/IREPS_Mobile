@@ -37,6 +37,15 @@ class _CommonScreenState extends State<CommonScreen> {
   String? localCurrVer;
   String? globalCurrVer, globalLastAppVer;
 
+  final List<Map<String, dynamic>> _bottomnavData = [
+    {'label': 'Home', 'icon': Icons.home},
+    {'label': 'Login', 'icon': Icons.person_pin},
+    {'label': 'Helpdesk', 'icon': Icons.help},
+    {'label': 'Links', 'icon': Icons.link},
+  ];
+
+
+
   void initState() {
     super.initState();
     //fetchVersion();
@@ -332,74 +341,93 @@ class _CommonScreenState extends State<CommonScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        if(bottomIndex != 0) {
-          Future.delayed(Duration.zero, () => setState(() {bottomIndex = 0;}));
-          return false;
-        } else {
-           AapoortiUtilities.alertDialog(context, "IREPS");
-          //_onBackPressed();
-          return true;
-        }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.cyan[400],
-          title: Text(
-            // 'आपूर्ति (IREPS)',
-            'IREPS',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+        onWillPop: () async{
+          if(bottomIndex != 0) {
+            Future.delayed(Duration.zero, () => setState(() {bottomIndex = 0;}));
+            return false;
+          } else {
+            AapoortiUtilities.alertDialog(context, "IREPS");
+            return true;
+          }
+        },
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.white),
+            backgroundColor: Colors.cyan[400],
+            title: Text(
+              // 'आपूर्ति (IREPS)',
+              'IREPS',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-        backgroundColor: Colors.grey[200],
-        drawer: AapoortiUtilities.navigationdrawerbeforLOgin(_scaffoldKey, context),
-        body: _screens![bottomIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          currentIndex: bottomIndex,
-          onTap: navigateFunction,
-          selectedItemColor: Colors.cyan[400], // Active item color
-          unselectedItemColor: Colors.grey, // Inactive item color
-          items: [
-            BottomNavigationBarItem(
-              label: 'Home',
-              icon: SizedBox(
-                width: 35,
-                height: 33,
-                child: Icon(Icons.home),
+          backgroundColor: Colors.grey[200],
+          drawer: AapoortiUtilities.navigationdrawerbeforLOgin(_scaffoldKey, context),
+          body: _screens![bottomIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            currentIndex: bottomIndex,
+            onTap: navigateFunction,
+            unselectedItemColor: Colors.black,
+            showUnselectedLabels: true,
+            selectedItemColor: Colors.cyan[400],
+            items: List.generate(
+              growable: false,
+              _bottomnavData.length, (index) => BottomNavigationBarItem(
+              icon: Container(
+                height: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: bottomIndex == index ? Colors.cyan[400] : Colors.grey[300],
+                ),
+                child: Icon(
+                  _bottomnavData[index]['icon'],
+                  size: 24.0,
+                  color: bottomIndex == index ? Colors.white : Colors.black,
+                ),
               ),
+              label: _bottomnavData[index]['label'], // Always display labels
             ),
-            BottomNavigationBarItem(
-              //icon: new Icon(Icons.person),
-              icon: SizedBox(
-                width: 35,
-                height: 33,
-                child: Icon(Icons.person_pin),
-              ),
-              label: 'Login',
             ),
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                    width: 35,
-                    height: 33,
-                    child: Icon(Icons.live_help)),
-                label: 'Helpdesk'),
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                    width: 35,
-                    height: 33,
-                    child: Icon(Icons.link)),
-                label: 'Links'),
-          ],
+
+          ),
+          // items: [
+          //   BottomNavigationBarItem(
+          //     label: 'Home',
+          //     icon: Icon(
+          //         Icons.home,
+          //         size: _selectedIndex == index ? 40.0 : 24.0, // Dynamic size
+          //         color: _selectedIndex == index ? Colors.white : Colors.black,
+          //     ),
+          //   ),
+          //   BottomNavigationBarItem(
+          //     //icon: new Icon(Icons.person),
+          //     icon: SizedBox(
+          //       width: 35,
+          //       height: 33,
+          //       child: Icon(Icons.person_pin),
+          //     ),
+          //     label: 'Login',
+          //   ),
+          //   BottomNavigationBarItem(
+          //       icon: SizedBox(
+          //           width: 35,
+          //           height: 33,
+          //           child: Icon(Icons.live_help)),
+          //       label: 'Helpdesk'),
+          //   BottomNavigationBarItem(
+          //       icon: SizedBox(
+          //           width: 35,
+          //           height: 33,
+          //           child: Icon(Icons.link)),
+          //       label: 'Links'),
+          // ],
         ),
-      ),
-    );
-  }
+    );}
 
 }
