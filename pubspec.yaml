@@ -23,13 +23,17 @@ module:
 dependencies:
   flutter:
     sdk: flutter
+#  url_launcher: ^6.3.1
+#  dio: ^5.8.0+1
+#  path_provider: ^2.1.5
+#  permission_handler: ^11.3.1
 
   http: ^1.2.1
   flutter_spinkit: ^5.1.0
   connectivity_plus: ^6.1.1
   sqflite: ^2.0.2
   dio:
-  #path_provider:  ^2.0.9
+  path_provider:  ^2.0.9
   #carousel_slider:
   flutter_charts: ^0.5.2
   #charts_flutter:

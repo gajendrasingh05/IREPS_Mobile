@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_app/aapoorti/common/AapoortiConstants.dart';
 import 'package:flutter_app/aapoorti/common/AapoortiUtilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/mmis/view/components/text/read_more_text.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_app/aapoorti/common/DatabaseHelper.dart';
@@ -21,12 +22,14 @@ class _BannedFirmsState extends State<BannedFirms> {
   void initState() {
     super.initState();
     fetchPost();
-    if(AapoortiConstants.count == '0' || DateTime.now().toString().compareTo(AapoortiConstants.date2) > 0)
+    if (AapoortiConstants.count == '0' ||
+        DateTime.now().toString().compareTo(AapoortiConstants.date2) > 0)
       fetchSavedBF();
   }
 
   _progressShow() {
-    pr = ProgressDialog(context, type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
+    pr = ProgressDialog(context,
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
     pr!.show();
   }
 
@@ -85,17 +88,20 @@ class _BannedFirmsState extends State<BannedFirms> {
   void fetchPost() async {
     var v = "https://ireps.gov.in/Aapoorti/ServiceCallHD/bannedFirms?TYPE=0";
 
-    if(AapoortiConstants.jsonResult2 != null && DateTime.now().toString().compareTo(AapoortiConstants.date2) < 0) {
+    if (AapoortiConstants.jsonResult2 != null &&
+        DateTime.now().toString().compareTo(AapoortiConstants.date2) < 0) {
       jsonResult = AapoortiConstants.jsonResult2;
-    }
-    else if(DateTime.now().toString().compareTo(AapoortiConstants.date2) > 0) {
+    } else if (DateTime.now().toString().compareTo(AapoortiConstants.date2) >
+        0) {
       AapoortiConstants.count = '0';
       await dbHelper.deleteBanned(1);
-      final response = await http.post(Uri.parse(v)).timeout(Duration(seconds: 30));
+      final response =
+          await http.post(Uri.parse(v)).timeout(Duration(seconds: 30));
       jsonResult = json.decode(response.body);
     } else {
       await dbHelper.deleteBanned(1);
-      final response = await http.post(Uri.parse(v)).timeout(Duration(seconds: 30));
+      final response =
+          await http.post(Uri.parse(v)).timeout(Duration(seconds: 30));
       jsonResult = json.decode(response.body);
     }
     setState(() {});
@@ -122,7 +128,7 @@ class _BannedFirmsState extends State<BannedFirms> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Colors.cyan[400],
+            backgroundColor: Colors.lightBlue[800],
             actions: [
               IconButton(
                 icon: Icon(
@@ -130,14 +136,15 @@ class _BannedFirmsState extends State<BannedFirms> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, "/common_screen", (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/common_screen", (route) => false);
                   //Navigator.of(context, rootNavigator: true).pop();
                 },
               ),
             ],
-            title: Text('Banned/Suspended Firms', maxLines: 1, style: TextStyle(color: Colors.white))
-        ),
-        backgroundColor: Colors.grey[200],
+            title: Text('Banned/Suspended Firms',
+                maxLines: 1, style: TextStyle(color: Colors.white))),
+        backgroundColor: Colors.white,
         body: Column(
           children: <Widget>[
             Container(
@@ -154,7 +161,7 @@ class _BannedFirmsState extends State<BannedFirms> {
                           text: 'To view latest data, click here',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.teal[900],
+                            color: Colors.lightBlue[800],
                           ),
                         ),
                       ),
@@ -171,9 +178,9 @@ class _BannedFirmsState extends State<BannedFirms> {
             Container(
                 child: Expanded(
                     child: jsonResult == null
-                        ? SpinKitFadingCircle(
-                            color: Colors.cyan,
-                            size: 130.0,
+                        ? SpinKitWave(
+                            color: Colors.lightBlue[800],
+                            size: 30.0,
                           )
                         : _BannedFirmsListView(context)))
           ],
@@ -181,236 +188,300 @@ class _BannedFirmsState extends State<BannedFirms> {
       ),
     );
   }
-
   Widget _BannedFirmsListView(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: jsonResult != null ? jsonResult!.length : 0,
       itemBuilder: (context, index) {
-        return Card(
-          color: Colors.white,
-          surfaceTintColor: Colors.white,
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <
-              Widget>[
-            Text(
-              "\n" + (index + 1).toString() + ".       ",
-              style: TextStyle(color: Colors.indigo, fontSize: 16),
+        return Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: 10, vertical: 3), // Reduced vertical spacing
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Shadow color
+                  spreadRadius: 1, // Spread the shadow
+                  blurRadius: 1, // Blur radius
+                  offset: Offset(0, 2), // Shadow position
+                ),
+              ],
             ),
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Text(
-                        jsonResult![index]['VNAME'] != null
-                            ? ("\n" + jsonResult![index]['VNAME'])
-                            : "",
-                        style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ))
-                    ]),
-                    Padding(
-                      padding: EdgeInsets.all(5),
-                    ),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
+            child: Card(
+                elevation: 3,
+                color: index % 2 == 0
+                    ? Color(0xFFF0F8FF)
+                    : Colors.white, // Alternating colors
+                // surfaceTintColor: index.isEven ? Colors.white : Colors.grey[200],// Adds shadow for a shaded effect
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Rounded corners
+                  side: BorderSide(
+                      color: Colors.grey.shade400, width: 1), // Shaded border
+                ),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 10.0, top: 1.0), // Add left and top padding
                         child: Text(
-                          "Letter No",
+                          "\n" + (index + 1).toString() + ".       ",
                           style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        child: Text(
-                          jsonResult![index]['LET_NO'] != null
-                              ? jsonResult![index]['LET_NO']
-                              : "",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      )
-                    ]),
-                    Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "Date",
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
+                              color: Colors.lightBlue[800], fontSize: 15),
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          height: 30,
-                          child: Text(
-                            jsonResult![index]['LET_DT_S'] != null
-                                ? jsonResult![index]['LET_DT_S']
-                                : "",
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ]),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "Address",
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ]),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Container(
-                        //height: 30,
-                        child: Text(
-                          jsonResult![index]['VADDRESS'] != null
-                              ? jsonResult![index]['VADDRESS']
-                              : "",
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                      ))
-                    ]),
-                    Padding(padding: EdgeInsets.only(top: 15.0)),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "Type",
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        child: Text(
-                          jsonResult![index]['SUBJ'] != null
-                              ? (jsonResult![index]['SUBJ'] == 'Banning'
-                                  ? "Banned"
-                                  : jsonResult![index]['SUBJ'])
-                              : "---",
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                      )
-                    ]),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "Banned Upto",
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        child: Text(
-                          jsonResult![index]['BAN_UPTO'] != null
-                              ? jsonResult![index]['BAN_UPTO']
-                              : "---",
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                      )
-                    ]),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "Remarks",
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ]),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Container(
-                        child: Text(
-                          jsonResult![index]['REMARKS'] != null
-                              ? jsonResult![index]['REMARKS']
-                              : "---",
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                      ))
-                    ]),
-                    Row(children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 125,
-                        child: Text(
-                          "View Letter",
-                          style: TextStyle(color: Colors.indigo, fontSize: 15),
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              if (jsonResult![index]['DOC_PATH'].toString() !=
-                                  'NA')
-                                GestureDetector(
-                                  onTap: () {
-                                    //if(jsonResult[index]['DOC_PATH']!='NA'){
-                                    var fileUrl =
-                                        AapoortiConstants.contextPath +
-                                            jsonResult![index]['DOC_PATH']
-                                                .toString();
-                                    var fileName = fileUrl
-                                        .substring(fileUrl.lastIndexOf("/"));
-                                    AapoortiUtilities.ackAlert(
-                                        context, fileUrl, fileName);
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    child: Image(
-                                        image:
-                                            AssetImage('images/pdf_home.png'),
-                                        height: 30,
-                                        width: 20),
-                                  ),
-                                )
-                              else
-                                Container(
-                                  height: 30,
-                                  child: Text("---"),
-                                ),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                            Row(children: <Widget>[
+                              Expanded(
+                                  child: Text(
+                                jsonResult![index]['VNAME'] != null
+                                    ? ("\n" + jsonResult![index]['VNAME'])
+                                    : "",
+                                style: TextStyle(
+                                    color: Colors.lightBlue[800],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ))
                             ]),
-                      ),
-                    ])
-                  ]),
-            ),
-          ]),
-        );
+
+                            Row(
+                              children: <Widget>[
+                                if (jsonResult![index]['SUBJ'] !=
+                                    null) // Show only if SUBJ is not null
+                                  Text(
+                                    " ( " +
+                                        (jsonResult![index]['SUBJ'] == 'Banning'
+                                            ? "Banned"
+                                            : jsonResult![index]['SUBJ']) +
+                                        " ) ",
+                                    style: TextStyle(
+                                      color: Colors.red, // Blue color
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            Row(children: <Widget>[
+                              Container(
+                                height: 30,
+                                width: 76,
+                                child: Text(
+                                  "Letter No",
+                                  style: TextStyle(
+                                    color: Colors.lightBlue[800],
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text(
+                                  jsonResult![index]['LET_NO'] != null
+                                      ? jsonResult![index]['LET_NO']
+                                      : "",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              )
+                            ]),
+                            Row(
+                                children: <Widget>[
+                                  Container(
+                                    height: 30,
+                                    width: 76,
+                                    child: Text(
+                                      "Date",
+                                      style: TextStyle(
+                                        color: Colors.lightBlue[800],
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 30,
+                                      child: Text(
+                                        jsonResult![index]['LET_DT_S'] != null
+                                            ? jsonResult![index]['LET_DT_S']
+                                            : "",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // Address label
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom:
+                                          3), // Space between label and value
+                                  child: Text(
+                                    "Address",
+                                    style: TextStyle(
+                                      color: Colors.lightBlue[800],
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                // Address value
+                                ReadMoreText(
+                                  jsonResult![index]['VADDRESS'] != null
+                                      ? jsonResult![index]['VADDRESS']
+                                      : "",
+                                  trimLines: 2,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                  ),
+                                  colorClickableText: Colors.grey,
+                                  trimMode: TrimMode.Line,
+                                  trimCollapsedText: '..More',
+                                  trimExpandedText: '..Less',
+                                ),
+                              ],
+                            ),
+                            Padding(padding: EdgeInsets.only(top: 4.0)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // Title "Remarks"
+                                Container(
+                                  height: 20,
+                                  child: Text(
+                                    "Remarks",
+                                    style: TextStyle(
+                                      color: Colors.lightBlue[800],
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                // Value of Remarks
+                                SizedBox(
+                                    height: 0), // Space between title and value
+                                ReadMoreText(
+                                  jsonResult![index]['REMARKS'] != null
+                                      ? jsonResult![index]['REMARKS']
+                                      : "---",
+                                  trimLines: 2,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                  ),
+                                  colorClickableText: Colors.grey,
+                                  trimMode: TrimMode.Line,
+                                  trimCollapsedText: '..More',
+                                  trimExpandedText: '..Less',
+                                ),
+                              ],
+                            ),
+                            Row(children: <Widget>[
+                              Container(
+                                height: 30,
+                                width: 100,
+                                child: Text(
+                                  "Banned Upto",
+                                  style: TextStyle(
+                                    color: Colors.lightBlue[800],
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text(
+                                  jsonResult![index]['BAN_UPTO'] != null
+                                      ? jsonResult![index]['BAN_UPTO']
+                                      : "---",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              )
+                            ]),
+
+                            Row(
+                              children: [
+                              Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        if (jsonResult![index]['DOC_PATH'].toString() != 'NA')
+                                          SizedBox.shrink()
+                                        else
+                                          Container(
+                                            height: 15,
+                                          ),
+                                          SizedBox(height: 3), // Space between the URL and the text
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (jsonResult![index]['DOC_PATH'].toString() != 'NA') {
+                                              var fileUrl = AapoortiConstants.contextPath + jsonResult![index]['DOC_PATH'].toString();
+                                              var fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Choose an option for file"),
+                                                    content: Text(
+                                                      "\"$fileName\"",
+                                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                                    ),
+                                                    actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text("Download"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        var fileNme = jsonResult![index]['DOC_PATH'].toString().substring(jsonResult![index]['DOC_PATH'].toString().lastIndexOf("/"));
+                                                        AapoortiUtilities.openPdf(context, jsonResult![index]['DOC_PATH'].toString(), fileNme);
+                                                      },
+                                                      child: Text("Open"),
+                                                    ),
+                                                  ],
+                                                 );
+                                                },
+                                              );
+                                            }
+                                              else {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text("File not available as it was not uploaded by the Railway Department."),
+                                                    backgroundColor: Colors.red[200],
+                                                  ),
+                                                );
+                                               }
+                                               },
+                                              child: Padding(
+                                                padding: EdgeInsets.only(right: 10), // Space between text and card boundary
+                                                 child: Text(
+                                                    "View Letter",
+                                                    style: TextStyle(
+                                                      color: jsonResult![index]['DOC_PATH'].toString() != 'NA' ? Colors.green : Colors.red,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                              ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            )
+                          ]))
+                    ])));
       },
     );
   }
