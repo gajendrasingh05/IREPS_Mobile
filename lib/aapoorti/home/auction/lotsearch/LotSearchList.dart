@@ -62,8 +62,8 @@ class _LotSearchListState extends State<LotSearchList> {
           ? visibleYes = false
           : visibleYes = true; // setting visibility
       lotType == 0
-          ? heading = "List of Lots(Published)"
-          : heading = "List of Lots(Sold out)";
+          ? heading = "List of Lots (Published)"
+          : heading = "List of Lots (Sold out)";
       data = jsonResult!;
     });
   }
@@ -80,7 +80,7 @@ class _LotSearchListState extends State<LotSearchList> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Colors.cyan[400],
+            backgroundColor: Colors.lightBlue[800],
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -101,47 +101,36 @@ class _LotSearchListState extends State<LotSearchList> {
                 ),
               ],
             )),
-        /*MaterialApp(
-      title: 'Lot Search',
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
-      ),
-      home: Scaffold(
-
-        appBar: AppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
-          title: Text('Lot Search',
-              style:TextStyle(
-                  color: Colors.white
-              )
-          ),
-          backgroundColor:Colors.cyan ,
-        ),*/
         body: Container(
           child: Column(
             children: <Widget>[
               Container(
                 width: 400,
-                height: 30,
-                color: Colors.cyan.shade600,
-                padding: const EdgeInsets.only(top: 10),
+                height: 25,
+                color: Colors.white,
+                padding: const EdgeInsets.only(top: 5),
                 child: Text(
                   heading,
                   style: new TextStyle(
-                      color: Colors.white,
-                      backgroundColor: Colors.cyan.shade600,
+                      color: Colors.lightBlue.shade800,
+                      // backgroundColor: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17),
+                      fontSize: 15),
                   textAlign: TextAlign.center,
                 ),
               ),
               Expanded(
+                child: Container(
+                  color: Colors.white, // Set the desired background color here
                   child: jsonResult == null
-                      ? SpinKitFadingCircle(
-                          color: Colors.cyan,
-                          size: 120.0,
-                        )
-                      : _lotsearchlist(context))
+                      ? SpinKitWave(
+                    color: Colors.lightBlue[800],
+                    size: 30.0,
+                  )
+                      : _lotsearchlist(context),
+                ),
+              )
+
             ],
           ),
         ),
@@ -150,114 +139,106 @@ class _LotSearchListState extends State<LotSearchList> {
   }
 
   Widget _lotsearchlist(BuildContext context) {
-    //Dismiss spinner
-
-    SpinKitWave(color: Colors.red, type: SpinKitWaveType.end);
-    return ListView.separated(
-      itemCount: jsonResult != null ? jsonResult!.length : 0,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: BorderSide(width: 1, color: Colors.grey[300]!),
-              ),
-
-              // padding: EdgeInsets.all(10),
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                      Widget>[
-                Text(
-                  (index + 1).toString() + ". ",
-                  style: TextStyle(
-                      color: Colors.indigo,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      Row(children: <Widget>[
-                        Expanded(
-                          //height: 30,
-                          child: Text(
-                            jsonResult![index]['ACCNM'] != null
-                                ? jsonResult![index]['ACCNM']
-                                : "",
-                            style: TextStyle(
-                                color: Colors.indigo,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ]),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                      ),
-                      Row(children: <Widget>[
-                        Container(
-                          height: 30,
-                          width: 125,
-                          child: Text(
-                            "Location",
-                            style:
-                                TextStyle(color: Colors.indigo, fontSize: 16),
-                          ),
-                        ),
-                        Expanded(
-                          //height: 30,
-                          child: Text(
-                            jsonResult![index]['LOC'] != null
-                                ? jsonResult![index]['LOC']
-                                : "",
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                        )
-                      ]),
-                      Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
-                        Container(
-                          height: 30,
-                          width: 125,
-                          child: Text(
-                            "Description",
-                            style:
-                                TextStyle(color: Colors.indigo, fontSize: 16),
-                          ),
-                        ),
-                      ]),
-                      Row(children: <Widget>[
-                        Expanded(
-                          //height: 30,
-                          child: Text(
-                            jsonResult![index]['LOTDESC'] != null
-                                ? jsonResult![index]['LOTDESC']
-                                : "",
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                        )
-                      ]),
-                    ]))
-              ]),
-            ),
+    return Container(
+      color: Colors.white, // Light grey background
+      child: ListView.separated(
+        itemCount: jsonResult != null ? jsonResult!.length : 0,
+        itemBuilder: (context, index) {
+          return GestureDetector(
             onTap: () {
               lotId = jsonResult![index]['LOTID'];
               print(lotId);
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LotSearchLotDetails(
-                          lotId: lotId!,
-                          lotType: lotType!))); //lotType:lotType)));
-            });
-      },
-      separatorBuilder: (context, index) {
-        //return Divider();
-        return Container(
-          height: 10,
-        );
-      },
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LotSearchLotDetails(
+                    lotId: lotId!,
+                    lotType: lotType!,
+                  ),
+                ),
+              );
+            },
+            child: Card(
+              elevation: 4,
+              color: index % 2 == 0 ? Color(0xFFE3F2FD) : Colors.white, // Alternating card colors
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Spacing
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // Rounded corners
+                side: BorderSide(
+                    color: Colors.grey.shade400, width: 1), // Shaded border
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(8), // Padding inside the card
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Index Number
+                    Text(
+                      "${index + 1}. ${jsonResult![index]['ACCNM'] ?? ""}",
+                      style: TextStyle(
+                        color: Colors.lightBlue[800],
+                        fontSize: 14,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+
+                    // Location
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            "Location",
+                            style: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto'),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            jsonResult![index]['LOC'] ?? "",
+                            style: TextStyle(color: Colors.grey, fontSize: 13, fontFamily: 'Roboto'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    // Description
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            "Description",
+                            style: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto'),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            jsonResult![index]['LOTDESC'] ?? "",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 13,
+                              fontFamily: 'Roboto',
+                            ),
+                            overflow: TextOverflow.ellipsis, // Prevents overflow issues
+                            maxLines: 2, // Adjust the number of lines as needed
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 1); // Space between cards
+        },
+      ),
     );
   }
+
 }

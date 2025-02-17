@@ -7,8 +7,6 @@ import 'package:flutter_app/aapoorti/home/auction/schedules/schedulenextpage.dar
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-//import "package:equatable/equatable.dart";
 class Users {
   final String? sid, category;
   const Users({
@@ -16,22 +14,18 @@ class Users {
     this.category,
   });
 }
-
 class schedule extends StatefulWidget {
   @override
   _scheduleState createState() => _scheduleState();
 }
-
 class _scheduleState extends State<schedule> {
   List<dynamic>? jsonResult;
   final dbHelper = DatabaseHelper.instance;
   var rowcount = -1;
   void initState() {
     super.initState();
-
     fetchPost();
   }
-
   void fetchPost() async {
     rowcount = (await dbHelper.rowCountSchedule())!;
     if (rowcount <= 0) {
@@ -107,7 +101,7 @@ class _scheduleState extends State<schedule> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Colors.cyan[400],
+            backgroundColor: Colors.lightBlue[800],
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -132,14 +126,14 @@ class _scheduleState extends State<schedule> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 40,
-                color: Colors.cyan.shade600,
-                padding: const EdgeInsets.only(top: 10),
+                height: 30,
+                color: Color(0xFFE3F2FD),
+                padding: const EdgeInsets.only(top: 7),
                 child: Text(
                   '  Total Records',
                   style: TextStyle(
-                      color: Colors.white,
-                      backgroundColor: Colors.cyan.shade600,
+                      color: Colors.lightBlue[800],
+                      backgroundColor: Color(0xFFE3F2FD),
                       fontWeight: FontWeight.bold,
                       fontSize: 17),
                   textAlign: TextAlign.center,
@@ -396,6 +390,9 @@ class _scheduleState extends State<schedule> {
                 }
               },
             );
+
+
+
           },
           separatorBuilder: (context, index) {
             return Container(

@@ -20,7 +20,7 @@ class _LotSearchState extends State<LotSearch> {
   bool _autoValidate = false;
   final FocusNode _firstFocus = FocusNode();
   String? railUnit, depotUnit, catid, desc = "";
-  TextStyle style = TextStyle(fontFamily: 'Roboto', fontSize: 15.0);
+  TextStyle style = TextStyle(fontFamily: 'Roboto', fontSize: 13.0);
   TextEditingController myController = TextEditingController();
   ProgressDialog? pr;
   bool visibilityPub = true;
@@ -129,9 +129,10 @@ class _LotSearchState extends State<LotSearch> {
           return true;
         },
         child: Scaffold(
+          backgroundColor: Colors.white,
             appBar: AppBar(
                 iconTheme: IconThemeData(color: Colors.white),
-                backgroundColor: Colors.cyan[400],
+                backgroundColor: Colors.lightBlue[800],
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -152,7 +153,7 @@ class _LotSearchState extends State<LotSearch> {
                 )),
             body: Builder(
               builder: (context) => Material(
-                color: Colors.cyan[50],
+                //color: Colors.lightBlue[800],
                 child: ListView(
                   children: <Widget>[
                     Container(
@@ -162,279 +163,298 @@ class _LotSearchState extends State<LotSearch> {
                         //autovalidate: _autoValidate,
                         child: Column(
                           children: <Widget>[
-                            Card(
-                                margin: EdgeInsets.only(
-                                    top: 20.0, left: 10, right: 10),
-                                child: Column(children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 10.0)),
-                                  Text(
-                                    '                Select Lot Type               ',
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                            Column(
+                              children: [
+                                // "Select Lot Type" with Buttons (Without Card)
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical:10), // Mobile-friendly spacing
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Spacing between text & buttons
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(
+                                          'Select Lot Type',
+                                          style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 15, // Optimized font size
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 3),
+                                      Flexible(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            _csfilter(1);
+                                            lotType = 0;
+                                            _changed(true, "pub");
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(color: (_filter == 1) ? Colors.blue : Colors.grey.shade400),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                          ),
+                                          child: Text(
+                                            "Published",
+                                            style: TextStyle(
+                                              color: (_filter == 1) ? Colors.blue : Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 3), // Space between buttons
+                                      Flexible(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            _csfilter(2);
+                                            lotType = 1;
+                                            _changed(true, "sold");
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(color: (_filter == 2) ? Colors.blue : Colors.grey.shade400),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                          ),
+                                          child: Text(
+                                            "Sold Out",
+                                            style: TextStyle(
+                                              color: (_filter == 2) ? Colors.blue : Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(bottom: 10.0)),
-                                  Container(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: <Widget>[
-                                          Icon(Icons.list,
-                                              color: Colors.black,
-                                              textDirection: TextDirection.rtl),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _csfilter(1);
-                                              lotType = 0;
-                                              _changed(true, "pub");
-                                            },
-                                            child: Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 5.0)),
-                                                Text(
-                                                  "Published",
-                                                  style: TextStyle(
-                                                      color: (_filter == 1)
-                                                          ? Colors.cyan
-                                                          : Colors.grey),
-                                                ),
-                                                Visibility(
-                                                  child: Image.asset(
-                                                    "assets/check_box.png",
-                                                    height: 30.0,
-                                                    width: 30.0,
-                                                  ),
-                                                  maintainSize: true,
-                                                  maintainAnimation: true,
-                                                  maintainState: true,
-                                                  visible: visibilityPub,
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 5.0)),
-                                              ],
-                                            ),
-                                            // borderSide: BorderSide(
-                                            //   color: Colors
-                                            //       .black, //Color of the border
-                                            //   style: BorderStyle
-                                            //       .solid, //Style of the border
-                                            //   width: 2.0, //width of the border
-                                            // ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _csfilter(2);
-                                              lotType = 1;
-                                              _changed(true, "sold");
-                                            },
-                                            child: Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 5.0)),
-                                                Text(
-                                                  "Sold Out",
-                                                  style: new TextStyle(
-                                                      color: (_filter == 1)
-                                                          ? Colors.grey
-                                                          : Colors.cyan),
-                                                ),
-                                                Visibility(
-                                                  child: Image.asset(
-                                                    "assets/check_box.png",
-                                                    height: 30.0,
-                                                    width: 30.0,
-                                                  ),
-                                                  maintainSize: true,
-                                                  maintainAnimation: true,
-                                                  maintainState: true,
-                                                  visible: visibilitySold,
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 5.0)),
-                                              ],
-                                            ),
-                                            //color: Colors.white,
-                                            // borderSide: BorderSide(
-                                            //   color: Colors.black,
-                                            //   style: BorderStyle.solid,
-                                            //   width: 2.0,
-                                            // ),
-                                          ),
-                                        ]),
-                                    margin: EdgeInsets.all(10.0),
-                                  )
-                                ])),
-                            Padding(padding: EdgeInsets.only(top: 10.0)),
-                            Card(
-                              child: DropdownButtonFormField(
-                                hint: Text(railUnit != null
-                                    ? railUnit!
-                                    : "All Railway Units"),
-                                decoration: InputDecoration(
-                                    icon:
-                                        Icon(Icons.train, color: Colors.black)),
-                                items: dataRail.map((item) {
-                                  return DropdownMenuItem(
-                                      child: Text(item['NAME']),
-                                      value: item['ID'].toString());
-                                }).toList(),
-                                onChanged: (newVal1) {
-                                  setState(() {
-                                    railUnit = newVal1 as String?;
-                                  });
-                                  fetchdata();
-                                },
-                                value: railUnit,
-                              ),
+                                ),
+                              ],
                             ),
-                            Padding(padding: EdgeInsets.only(top: 10.0)),
+                            Padding(padding: EdgeInsets.only(top: 1.0)),
                             Card(
-                              // margin: EdgeInsets.only(top:30.0,left: 15,right: 15) ,
-                              child: DropdownButtonFormField(
-                                hint: Text('Select Depot'),
-                                decoration: InputDecoration(
-                                    icon: Icon(Icons.account_balance,
-                                        color: Colors.black)),
-                                items: dataDepot.map((item) {
-                                  return DropdownMenuItem(
-                                      child: Text(item['DEPOT_NAME']),
-                                      value: item['DEPOT_ID'].toString());
-                                }).toList(),
-                                onChanged: (newVal2) {
-                                  setState(() {
-                                    depotUnit = newVal2 as String?;
-                                  });
-                                },
-                                value: depotUnit,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10.0)),
-                            Card(
-                              child: TextFormField(
-                                onSaved: (value) {
-                                  desc = value;
-                                },
-                                controller: myController,
-                                onEditingComplete: () {
-                                  desc = myController.text;
-                                  checkvalue();
-                                  FocusScope.of(context)
-                                      .requestFocus(_firstFocus);
-                                },
-                                validator: (desc) {
-                                  if (desc!.length < 3) {
-                                    return 'Compulsory field!! Enter 4 to 30 characters';
-                                  } else if (desc.length > 30) {
-                                    return 'Maximum 30 characters only!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 12.0, horizontal: 0.1),
-                                    icon: Icon(
-                                      Icons.border_color,
-                                      color: Colors.black,
-                                      textDirection: TextDirection.rtl,
-                                      size: 18,
+                              elevation: 4, // Adds shadow effect
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Rounded edges
+                              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6), // Responsive spacing
+                              child: Padding(
+                                padding: EdgeInsets.all(8), // Reduced padding inside the card
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Railway Unit Dropdown
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 5), // Space between dropdowns
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+                                        child: DropdownButtonFormField(
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Reduced padding inside dropdown
+                                            hintText: "Select Railway Unit", // Hint text instead of label
+                                            prefixIcon: Icon(Icons.train, color: Colors.blueGrey), // Icon inside input
+                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(color: Colors.blueGrey),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(color: Colors.grey),
+                                            ),
+                                            floatingLabelBehavior: FloatingLabelBehavior.never, // Prevents label from floating
+                                          ),
+                                          value: railUnit,
+                                          hint: Text(railUnit ?? "All Railway Units"),
+                                          items: dataRail.map((item) {
+                                            return DropdownMenuItem(
+                                              value: item['ID'].toString(),
+                                              child: Text(item['NAME']),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newVal1) {
+                                            setState(() {
+                                              railUnit = newVal1 as String?;
+                                            });
+                                            fetchdata();
+                                          },
+                                        ),
+
+                                      ),
                                     ),
-                                    labelText:
-                                        'Lot no. or Description(Min 4 Chars.)',
-                                    labelStyle: TextStyle(
-                                      color: Colors.grey,
+
+                                    // Depot Dropdown
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 15), // Space between dropdowns
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          return SizedBox(
+                                            width: constraints.maxWidth, // Uses the available screen width dynamically
+                                            child: DropdownButtonFormField(
+                                              isExpanded: true, // Prevents overflow by expanding dropdown
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Reduced padding inside dropdown
+                                                hintText: "Select Depot", // Hint text instead of label
+                                                prefixIcon: Icon(Icons.account_balance, color: Colors.blueGrey),
+                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  borderSide: BorderSide(color: Colors.blueGrey),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  borderSide: BorderSide(color: Colors.grey),
+                                                ),
+                                                floatingLabelBehavior: FloatingLabelBehavior.never, // Prevents label from floating
+                                              ),
+                                              value: depotUnit,
+                                              hint: Text("Select Depot"),
+                                              items: dataDepot.map((item) {
+                                                return DropdownMenuItem(
+                                                  value: item['DEPOT_ID'].toString(),
+                                                  child: Text(item['DEPOT_NAME']),
+                                                );
+                                              }).toList(),
+                                              onChanged: (newVal2) {
+                                                setState(() {
+                                                  depotUnit = newVal2 as String?;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    helperStyle: TextStyle(
-                                      color: Colors.grey,
-                                    )),
+
+                                    // Description Input
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 5), // Space between dropdowns
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+                                        child: TextFormField(
+                                          controller: myController,
+                                          onSaved: (value) {
+                                            desc = value;
+                                          },
+                                          onEditingComplete: () {
+                                            desc = myController.text;
+                                            checkvalue();
+                                            FocusScope.of(context).requestFocus(_firstFocus);
+                                          },
+                                          validator: (desc) {
+                                            if (desc!.length < 3) {
+                                              return 'Compulsory field!! Enter 4 to 30 characters';
+                                            } else if (desc.length > 30) {
+                                              return 'Maximum 30 characters only!';
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Reduced padding inside input field
+                                            hintText: 'Lot no. or Description (Min 4 Chars.)', // Changed labelText to hintText
+                                            prefixIcon: Icon(Icons.border_color, color: Colors.blueGrey),
+                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(color: Colors.blueGrey),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(color: Colors.grey),
+                                            ),
+                                            errorStyle: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: 8,
                             ),
-                            MaterialButton(
-                              minWidth: 330,
-                              height: 35,
-                              padding: EdgeInsets.fromLTRB(
-                                25.0,
-                                5.0,
-                                25.0,
-                                5.0,
-                              ),
-                              child: Text(
-                                'Show Results',
-                                textAlign: TextAlign.center,
-                                style: style.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(30.0)),
-                              onPressed: () async {
-                                if (!myController.text.isEmpty) {
-                                  try {
-                                    var connectivityresult =
-                                        await InternetAddress.lookup(
-                                            'google.com');
-                                    if (connectivityresult != null &&
-                                        railUnit != null &&
-                                        depotUnit != null &&
-                                        desc != null &&
-                                        lotType != null) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LotSearchList(
-                                                      lotType: lotType,
-                                                      railUnit: railUnit!,
-                                                      depotUnit: depotUnit!,
-                                                      desc: desc!)));
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center, // Center align buttons
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (!myController.text.isEmpty) {
+                                      try {
+                                        var connectivityresult = await InternetAddress.lookup('google.com');
+                                        if (connectivityresult != null &&
+                                            railUnit != null &&
+                                            depotUnit != null &&
+                                            desc != null &&
+                                            lotType != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => LotSearchList(
+                                                lotType: lotType,
+                                                railUnit: railUnit!,
+                                                depotUnit: depotUnit!,
+                                                desc: desc!,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                                        }
+                                      } on SocketException catch (_) {
+                                        print('internet not available');
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
+                                      }
                                     }
-                                  } on SocketException catch (_) {
-                                    print('internet not available');
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => NoConnection()));
-                                  }
-                                }
-                                checkvalue();
-                                FocusScope.of(context)
-                                    .requestFocus(_firstFocus);
-                              },
-                              color: Colors.cyan.shade400,
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 20)),
-                            MaterialButton(
-                                minWidth: 330,
-                                height: 35,
-                                padding:
-                                    EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
-                                child: Text('Reset',
+                                    checkvalue();
+                                    FocusScope.of(context).requestFocus(_firstFocus);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(330, 35),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                                    backgroundColor: Colors.lightBlue[800],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Show Results',
                                     textAlign: TextAlign.center,
                                     style: style.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18)),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(30.0)),
-                                onPressed: () {
-                                  _onClear();
-                                },
-                                color: Colors.cyan.shade400),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 10), // Space between buttons
+
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _onClear();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(330, 35),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                                    //backgroundColor: Colors.lightBlue[800],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(color:Colors.lightBlue.shade800),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Reset',
+                                    textAlign: TextAlign.center,
+                                    style: style.copyWith(
+                                      color: Colors.lightBlue[800],
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
                           ],
                         ),
                       ),
