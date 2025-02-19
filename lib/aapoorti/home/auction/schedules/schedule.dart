@@ -18,7 +18,9 @@ class schedule extends StatefulWidget {
   @override
   _scheduleState createState() => _scheduleState();
 }
+
 class _scheduleState extends State<schedule> {
+  int? _selectedIndex;
   List<dynamic>? jsonResult;
   final dbHelper = DatabaseHelper.instance;
   var rowcount = -1;
@@ -141,10 +143,10 @@ class _scheduleState extends State<schedule> {
               ),
               Expanded(
                   child: jsonResult == null
-                      ? SpinKitFadingCircle(
-                          color: Colors.cyan,
-                          size: 120.0,
-                        )
+                      ? SpinKitWave(
+                    color: Colors.lightBlue[800],
+                    size: 30.0,
+                  )
                       : _myListView(context))
             ],
           ),
@@ -152,259 +154,312 @@ class _scheduleState extends State<schedule> {
       ),
     );
   }
-
   Widget _myListView(BuildContext context) {
-    SpinKitWave(color: Colors.red, type: SpinKitWaveType.end);
-
-    if (jsonResult!.isEmpty) {
-      AapoortiUtilities.showInSnackBar(context, "No Schedule  Tender");
-    } else {
-      return ListView.separated(
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              child: Card(
-                  elevation: 4,
-                  color: Colors.white,
-                  surfaceTintColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: BorderSide(width: 1, color: Colors.grey[300]!),
-                  ),
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Card(
+              elevation: 6,
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(width: 1, color: Colors.grey[300]!),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(10),
                   child: Column(
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.only(top: 6)),
+                    children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Padding(padding: EdgeInsets.only(top: 8)),
-                              Padding(padding: EdgeInsets.only(left: 8)),
-                              Text(
-                                (index + 1).toString() + ". ",
-                                style: TextStyle(
-                                    color: Colors.indigo,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          Padding(padding: EdgeInsets.only(left: 8)),
+                          Text(
+                            "${index + 1}. ",
+                            style: TextStyle(
+                              color: Colors.blue[800],
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-
                           Expanded(
                             child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    Expanded(
-                                      child: Row(children: <Widget>[
-                                        Expanded(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  jsonResult![index]['RLYNAME'] != null
+                                      ? "${jsonResult![index]['RLYNAME']} / ${jsonResult![index]['DEPTNAME']}"
+                                      : "",
+                                  style: TextStyle(
+                                    color: Colors.blue[800],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 6.0)),
+                                Divider(
+                                  color: Colors.blue[200], // Divider color
+                                  thickness: 1,  // Divider thickness
+                                  indent:0,  // Indentation from the left
+                                  endIndent: 0 // Indentation from the right
+                                ),
+                                // Schedule Number
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Align all elements to the left
+                                  children: [
+                                    // Schedule Number
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 120, // Fixed width for the label to align all colons
                                           child: Text(
-                                            jsonResult![index]['RLYNAME'] != null
-                                                ? (jsonResult![index]
-                                                        ['RLYNAME'] +
-                                                    " / " +
-                                                    jsonResult![index]
-                                                        ['DEPTNAME'])
-                                                : "",
+                                            "Schedule No: ",
                                             style: TextStyle(
-                                              color: Colors.indigo,
+                                              color: Colors.blue[800],
                                               fontSize: 15,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ),
-                                      ]),
-                                    )
-                                  ]),
-                                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                                  Row(children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                        height: 30,
-                                        width: 110,
-                                        child: Text(
-                                          "Schedule No :",
-                                          style: TextStyle(
-                                            color: Colors.indigo,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      flex: 4,
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                          height: 30,
+                                        Container(
+                                          width: 10, // Space between colon and value
                                           child: Text(
-                                            jsonResult![index]['SCHDLNO'] != null
-                                                ? jsonResult![index]['SCHDLNO']
-                                                : "",
+                                            ":",
                                             style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
+                                              color: Colors.blue[800],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
-                                        flex: 6),
-                                  ]),
-                                  Row(children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                        height: 30,
-                                        child: Text(
-                                          'Auction Start',
-                                          style: TextStyle(
-                                              color: Colors.indigo,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                      flex: 4,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        height: 30,
-                                        child: Text(
-                                          jsonResult![index]['START_DATETIME'] !=
-                                                  null
-                                              ? jsonResult![index]
-                                                  ['START_DATETIME']
-                                              : "",
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                      flex: 6,
-                                    ),
-                                  ]),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Container(
-                                          height: 30,
+                                        Expanded(
                                           child: Text(
-                                            'Auction End',
+                                            jsonResult![index]['SCHDLNO'] ?? "N/A",
                                             style: TextStyle(
-                                                color: Colors.indigo,
-                                                fontSize: 16),
+                                              color: Colors.black54,
+                                              fontSize: 15,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                            overflow: TextOverflow.ellipsis, // Ensures single-line text
+                                            softWrap: false, // Prevents wrapping
                                           ),
                                         ),
-                                        flex: 4,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          height: 30,
+                                      ],
+                                    ),
+
+                                    // Auction Start
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 120, // Fixed width for the label to align all colons
                                           child: Text(
-                                            (jsonResult![index]
-                                                        ['END_DATETIME'] !=
-                                                    null
-                                                ? jsonResult![index]
-                                                    ['END_DATETIME']
-                                                : ""),
+                                            "Auction Start: ",
                                             style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 16),
+                                              color: Colors.blue[800],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
-                                        flex: 6,
-                                      ),
-                                    ],
-                                  ),
-                                ]),
+                                        Container(
+                                          width: 10, // Space between colon and value
+                                          child: Text(
+                                            ":",
+                                            style: TextStyle(
+                                              color: Colors.blue[800],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            jsonResult![index]['START_DATETIME'] ?? "Not Available",
+                                            style: TextStyle(
+                                              color: Colors.green[600],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            overflow: TextOverflow.ellipsis, // Ensures single-line text
+                                            softWrap: false, // Prevents wrapping
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    // Auction End
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 120, // Fixed width for the label to align all colons
+                                          child: Text(
+                                            "Auction End: ",
+                                            style: TextStyle(
+                                              color: Colors.blue[800],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 10, // Space between colon and value
+                                          child: Text(
+                                            ":",
+                                            style: TextStyle(
+                                              color: Colors.blue[800],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            jsonResult![index]['END_DATETIME'] ?? "Not Available",
+                                            style: TextStyle(
+                                              color: Colors.red[300],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            overflow: TextOverflow.ellipsis, // Ensures single-line text
+                                            softWrap: false, // Prevents wrapping
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-//
                         ],
-                      )
+                      ),
+                      Divider(
+                          color: Colors.blue[200], // Divider color
+                          thickness: 1,  // Divider thickness
+                          indent: 0,  // Indentation from the left
+                          endIndent: 0 // Indentation from the right
+                      ),
+
+                      // **Show Categories Button**
+                      if (jsonResult![index]['CORRI_DETAILS'] != 'NA')
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: _selectedIndex != index
+                              ? Padding(
+                            padding: EdgeInsets.only(top: 0.0), // Decrease space above the button
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = (_selectedIndex == index) ? null : index;
+                                });
+                              },
+                              child: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.blue,
+                                size: 24,
+                              ),
+                            ),
+                          )
+                              : SizedBox(),
+                        ),
+
+                      // **Horizontal Scrollable Category List**
+                      if (_selectedIndex == index)
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: _buildCategoryList(
+                            jsonResult![index]['DESCRIPTION'].toString(),
+                            jsonResult![index]['CATID'].toString(),
+                          ),
+                        ),
                     ],
-                  )),
-              onTap: () {
-                if (jsonResult![index]['CORRI_DETAILS'] != 'NA') {
-                  showDialog(
-                      context: context,
-                      builder: (_) => Material(
-                            type: MaterialType.transparency,
-                            child: Center(
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        top: 200,
-                                        bottom: 200,
-                                        left: 30,
-                                        right: 30),
-                                    padding: EdgeInsets.only(
-                                        top: 30,
-                                        bottom: 0,
-                                        left: 30,
-                                        right: 30),
-                                    color: Colors.white,
-                                    // Aligns the container to center
-                                    child: Column(children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(bottom: 5),
-                                        child: Text(
-                                          'List of Categories',
-                                          style: TextStyle(
-                                            color: Colors.indigo,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                            bottom: 0,
-                                          ),
-                                          child: Overlay(
-                                            context,
-                                            jsonResult![index]['DESCRIPTION']
-                                                .toString(),
-                                            jsonResult![index]['CATID']
-                                                .toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text('CLICK ON ANY CATEGORY',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.indigo)),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop('dialog');
-                                            },
-                                            child: Image(
-                                              image: AssetImage(
-                                                  'assets/close_overlay.png'),
-                                              color: Colors.black,
-                                              height: 50,
-                                            )),
-                                      )
-                                    ]))),
-                          ));
-                }
-              },
-            );
+                  ),
 
 
 
-          },
-          separatorBuilder: (context, index) {
-            return Container(
-              height: 10,
-            );
-          },
-          itemCount: jsonResult != null ? jsonResult!.length : 0);
-    }
-    return Container();
+              ),
+            ),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => SizedBox(height: 5),
+      itemCount: jsonResult?.length ?? 0,
+    );
   }
 
-  Widget Overlay(BuildContext context, String description, String catid) {
+  /// **Function to Display Category List in Horizontal Scroll**
+  Widget _buildCategoryList(String description, String catid) {
+    var categories = description.split('#');
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+      child: Row(
+        children: List.generate(categories.length, (index) {
+          return GestureDetector(
+            onTap: () {
+              var route = MaterialPageRoute(
+                builder: (BuildContext context) => schedule2(
+                  value1: Users(
+                    sid: catid,
+                    category: categories[index],
+                  ),
+                ),
+              );
+              Navigator.of(context).push(route);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              margin: EdgeInsets.symmetric(horizontal: 3),
+              decoration: BoxDecoration(color: Colors.blue[50],
+                 //color: Color(0xFFE3F2FD),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.blue.shade800, width: 0.5),
+              ),
+              child: Text(
+                categories[index].toString(),
+                style: TextStyle(color: Colors.blue[800], fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+  /// **Function to Display Category List**
+  Widget _buildCategoryList(String description, String catid) {
+    var categories = description.split('#');
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: categories.isNotEmpty ? categories.length : 0,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            var route = MaterialPageRoute(
+              builder: (BuildContext context) => schedule2(
+                value1: Users(
+                  sid: catid,
+                  category: categories[index],
+                ),
+              ),
+            );
+            Navigator.of(context).push(route);
+          },
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              categories[index].toString(),
+              style: TextStyle(color: Colors.black, fontSize: 17),
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 20),
+    );
+  }
+    Widget Overlay(BuildContext context, String description, String catid) {
     var sArray = description.split('#');
     var scatid = catid;
     return ListView.separated(
@@ -445,6 +500,6 @@ class _scheduleState extends State<schedule> {
             color: Colors.grey,
             height: 20,
           );
-        });
-  }
+       });
 }
+
