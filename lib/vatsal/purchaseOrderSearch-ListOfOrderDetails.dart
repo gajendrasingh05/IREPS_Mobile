@@ -1,45 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/aapoorti/helpdesk/requeststatus/view_helpdesk_details.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_app/aapoorti/common/AapoortiConstants.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Purchase Order Search',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
-      ),
-      home: PurchaseOrderSearch(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
+// called in SearchPoList.dart
 
 class PurchaseOrderSearch extends StatefulWidget {
+  final int? pokey;
+  PurchaseOrderSearch({this.pokey});
   @override
   _PurchaseOrderSearchState createState() => _PurchaseOrderSearchState();
 }
 
 class _PurchaseOrderSearchState extends State<PurchaseOrderSearch> {
-  List<PurchaseOrder> purchaseOrders = [
-    PurchaseOrder(
-      poSl: "1.0",
-      poNumber: "NR/01160018102351",
-      poDate: "12 May 2017",
-      supplierName: "M/S. SHARD DHAAN SALES PVT. LTD.",
-      supplierLocation: "KOLKATA",
-      itemDescription: "31356679: 1/2 INCH SAFETY VALVE TYPE T-2 SET AT 110 PSI TO W.S.F PART NO. J70929/18 OR ESCORT PART NO. 3EP 5551/1. FIRM'S OFFER: 1/2 INCH SAFETY VALVE TYPE 12 SET 8 Kg/cm2TO WSF PART NO: J70929/18.",
-      consignee: "EMU/GZB",
-      poValue: "206386.95",
-      poQtyUnit: "107",
-      tur: "107",
-      delyDate: "30 Nov 2017",
-    ),
-  ];
+ List<dynamic>? jsonResult;
+ int? pokey;
+
+ void initState() {
+   super.initState();
+   this.pokey = widget.pokey;
+   fetchPO();
+ }
+
+ List data = [];
+
+ Future<void> fetchPO() async {
+   var url = AapoortiConstants.webServiceUrl + 'Tender/PODesc?param=${this.pokey}';
+   final result = await http.post(Uri.parse(url));
+
+   print("pokey: $pokey");
+   print("API URL: $url");
+   print("API response: ${result.body}");
+
+   jsonResult = json.decode(result.body);
+
+   setState(() {
+     data = jsonResult!;
+   });
+ }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,13 +89,13 @@ class _PurchaseOrderSearchState extends State<PurchaseOrderSearch> {
 
           // List Section
           Expanded(
-            child: ListView.builder(
+            child: jsonResult == null ? SpinKitFadingCircle(color: Colors.cyan,size: 120,)
+            : ListView.builder(
               padding: EdgeInsets.all(16),
-              itemCount: purchaseOrders.length,
+              itemCount: data.length,
               itemBuilder: (context, index) {
-                return PurchaseOrderCard(
-                  purchaseOrder: purchaseOrders[index],
-                  index: index,
+                return _PurchaseOrderCard(
+                  purchaseOrder: data[index],
                 );
               },
             ),
@@ -105,25 +106,38 @@ class _PurchaseOrderSearchState extends State<PurchaseOrderSearch> {
   }
 }
 
-class PurchaseOrderCard extends StatefulWidget {
-  final PurchaseOrder purchaseOrder;
-  final int index;
+class _PurchaseOrderCard extends StatefulWidget {
+  final Map<String,dynamic> purchaseOrder;
 
-  const PurchaseOrderCard({
-    Key? key,
-    required this.purchaseOrder,
-    required this.index,
+  const _PurchaseOrderCard({
+    Key? key,required this.purchaseOrder,
   }) : super(key: key);
 
   @override
   _PurchaseOrderCardState createState() => _PurchaseOrderCardState();
 }
 
-class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
+class _PurchaseOrderCardState extends State<_PurchaseOrderCard> {
   bool isExpanded = false;
+  Map<String, String> extractSupplierData(String data) {
+    int numStart = data.indexOf('NR');
+    int dateStart = data.indexOf('dt.');
+    int nameStart = data.indexOf('M/') ;
+
+    String name = data.substring(nameStart).trim();
+    String date = data.substring(dateStart + 4 , nameStart - 4).trim();
+    String num = data.substring(numStart, dateStart).trim();
+
+    return {
+      'name': name,
+      'date': date,
+      'num': num,
+    };
+  } // supplier info breakdown
 
   @override
   Widget build(BuildContext context) {
+    final supplierDetails = extractSupplierData(widget.purchaseOrder['SUPPNM'] ?? '');
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -154,15 +168,15 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'PO Sl',
+                  'PO SI',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  widget.purchaseOrder.poSl,
+                  widget.purchaseOrder['SR'],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -172,8 +186,6 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
               ],
             ),
           ),
-
-          // Content
           Padding(
             padding: EdgeInsets.all(16),
             child: Column(
@@ -192,7 +204,8 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.business, color: Color(0xFF2196F3), size: 18),
+                          Icon(Icons.business, color: Color(0xFF2196F3),
+                              size: 18),
                           SizedBox(width: 8),
                           Text(
                             'Supplier Information',
@@ -205,11 +218,11 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                         ],
                       ),
                       SizedBox(height: 12),
-                      _buildSupplierRow('Name :', widget.purchaseOrder.supplierName),
+                      _buildSupplierRow('Name :', supplierDetails['name'] ?? '',),
                       SizedBox(height: 6),
-                      _buildSupplierRow('Order Number :', widget.purchaseOrder.poNumber),
+                      _buildSupplierRow('Order Number :', supplierDetails['num'] ?? ''),
                       SizedBox(height: 6),
-                      _buildSupplierRow('Order Date :', widget.purchaseOrder.poDate),
+                      _buildSupplierRow('Order Date :', supplierDetails['date'] ?? ''),
                     ],
                   ),
                 ),
@@ -219,7 +232,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     Expanded(
                       child: _buildValueCard(
                         'Consignee',
-                        widget.purchaseOrder.consignee,
+                        widget.purchaseOrder['CNSIGNEE'],
                         Color(0xFFFF9800),
                         Icons.location_on,
                       ),
@@ -228,7 +241,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     Expanded(
                       child: _buildValueCard(
                         'PO Value',
-                        '₹${widget.purchaseOrder.poValue}',
+                        '₹${widget.purchaseOrder['PO_VALUE'].toString()}',
                         Color(0xFF4CAF50),
                         Icons.currency_rupee,
                       ),
@@ -242,7 +255,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     Expanded(
                       child: _buildValueCard(
                         'Quantity',
-                        widget.purchaseOrder.poQtyUnit,
+                        widget.purchaseOrder['QTY'].toString(),
                         Color(0xFF2196F3),
                         Icons.inventory_2,
                       ),
@@ -251,7 +264,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     Expanded(
                       child: _buildValueCard(
                         'T.U.R',
-                        widget.purchaseOrder.tur,
+                        widget.purchaseOrder['TUR'],
                         Color(0xFF009688),
                         Icons.assessment,
                       ),
@@ -259,8 +272,6 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                   ],
                 ),
                 SizedBox(height: 16),
-
-                // Item Description with expandable functionality
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(12),
@@ -273,7 +284,8 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.description, color: Color(0xFF795548), size: 16),
+                          Icon(Icons.description, color: Color(0xFF795548),
+                              size: 16),
                           SizedBox(width: 8),
                           Text(
                             'Item Description',
@@ -287,14 +299,16 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        widget.purchaseOrder.itemDescription,
+                        widget.purchaseOrder['DESC1'],
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.grey[700],
                           height: 1.3,
                         ),
                         maxLines: isExpanded ? null : 2,
-                        overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                        overflow: isExpanded
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 4),
                       GestureDetector(
@@ -328,7 +342,8 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today, color: Color(0xFFA76535), size: 16),
+                      Icon(Icons.calendar_today, color: Color(0xFFA76535),
+                          size: 16),
                       SizedBox(width: 8),
                       Text(
                         'Delivery Date',
@@ -340,7 +355,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
                       ),
                       Spacer(),
                       Text(
-                        widget.purchaseOrder.delyDate,
+                        widget.purchaseOrder['DELAYDT'],
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -358,6 +373,8 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
     );
   }
 
+
+  // supplier info card
   Widget _buildSupplierRow(String label, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,7 +404,7 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
       ],
     );
   }
-
+  // details cards
   Widget _buildValueCard(String title, String value, Color color, IconData icon) {
     return Container(
       padding: EdgeInsets.all(12),
@@ -429,32 +446,4 @@ class _PurchaseOrderCardState extends State<PurchaseOrderCard> {
       ),
     );
   }
-}
-
-class PurchaseOrder {
-  final String poSl;
-  final String poNumber;
-  final String poDate;
-  final String supplierName;
-  final String supplierLocation;
-  final String itemDescription;
-  final String consignee;
-  final String poValue;
-  final String poQtyUnit;
-  final String tur;
-  final String delyDate;
-
-  PurchaseOrder({
-    required this.poSl,
-    required this.poNumber,
-    required this.poDate,
-    required this.supplierName,
-    required this.supplierLocation,
-    required this.itemDescription,
-    required this.consignee,
-    required this.poValue,
-    required this.poQtyUnit,
-    required this.tur,
-    required this.delyDate,
-  });
 }
